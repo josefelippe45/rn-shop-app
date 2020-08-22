@@ -1,0 +1,1 @@
+/**When the user select a product */
