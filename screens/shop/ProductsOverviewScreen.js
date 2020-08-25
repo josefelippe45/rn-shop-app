@@ -19,7 +19,15 @@ const ProductsOverviewScreen = props => {
                     image={itemData.item.imageUrl}
                     title={itemData.item.title}
                     price={itemData.item.price}
-                    onViewDetail={() => { }}
+                    onViewDetail={() => {
+                        props.navigation.navigate('ProductDetail',
+                            {
+                                //pointer at the id so it can be loaded in the detail screen
+                                productId: itemData.item.id,
+                                //pointer at title to set the header title of detail screen
+                                productTitle: itemData.item.title
+                            })
+                    }}
                     onAddToCart={() => { }}
                 />
             )}
