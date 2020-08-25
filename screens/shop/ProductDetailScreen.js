@@ -1,7 +1,10 @@
 /**When the user select a product */
 import React from 'react';
 import { ScrollView, View, Text, Image, Button, StyleSheet } from 'react-native'
-import { useSelector } from 'react-redux'
+/**will allow to tap into redux store and get the products from there */
+import { useSelector, useDispatch } from 'react-redux';
+//import actions
+import * as cartActions from '../../store/actions/cart';
 import Colors from '../../constants/Colors';
 const ProductDetailScreen = props => {
     //extracting navigation data
@@ -9,11 +12,19 @@ const ProductDetailScreen = props => {
     //using redux to help selecting single product. it access the 'products' slice defined in combineReducers
     //then access the availableProducts and runs a function on every item to match the one i want.
     const selectProduct = useSelector(state => state.products.availableProducts.find(prod => prod.id === productId));
+    //manages the actions from redux
+    const dispatch = useDispatch();
     return (
         <ScrollView>
             <Image style={styles.image} source={{ uri: selectProduct.imageUrl }} />
             <View style={styles.buttonsContainer}>
-                <Button color={Colors.primary} title="Add to Cart" onPress={() => { }} />
+                <Button
+                    color={Colors.primary}
+                    title="Add to Cart"
+                    onPress={() => {
+                        dispatch(cartActions.addToCart(selectProduct))
+                    }}
+                />
             </View>
             <Text style={styles.price}>${selectProduct.price.toFixed(2)}</Text>
             <Text style={styles.description}>{selectProduct.description}</Text>
@@ -45,7 +56,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginHorizontal: 20
     },
-    buttonsContainer:{
+    buttonsContainer: {
         marginVertical: 10,
         alignItems: "center"
     }
