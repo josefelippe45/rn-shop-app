@@ -42,23 +42,21 @@ export default (state = initialState, action) => {
             const selectedCartItem = state.items[action.pid];
             //action.pid is accessing the productId set on the REMOVE_FROM_CART action
             const currentQuantity = state.items[action.pid].quantity;
-            let updatedCartItems
+            let updatedCartItems;
             //checks if there's more than one item
             if (currentQuantity > 1) {
                 //need to reduce it
-                const updatedCartItems = new CartItem(
-                    selectedCartItem - 1,
+                const updatedCartItem = new CartItem(
+                    selectedCartItem.quantity - 1,
                     selectedCartItem.productPrice,
                     selectedCartItem.productTitle,
                     selectedCartItem.sum - selectedCartItem.productPrice
                 );
                 /**
-                 * NOTE: the first updateCartItems is the let variable, it isn't a const because with let we
-                 * can change it values.
                  * updatedCartItems needs to replace the old one. it takes the old state and then replace the
                  * productId with the productId from the action
                  */
-                updatedCartItems = {...state.items, [action.pid]: updatedCartItems}
+                updatedCartItems = {...state.items, [action.pid]: updatedCartItem}
             } else {
                 //"clone" the current state
                 updatedCartItems = { ...state.items };
