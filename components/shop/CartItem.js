@@ -11,7 +11,7 @@ const CartItem = props => {
                 <Text style={styles.mainText}>{props.title}</Text>
             </View>
             <View style={styles.itemInfo}>
-                <Text style={styles.mainText}>$ {props.amount.toFixed(2)}</Text>
+                <Text style={styles.mainText}>$ {props.amount.toFixed(2)} </Text>
                 <TouchableCmp onPress={props.onRemove} style={styles.delete}>
                     <Ionicons name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
                         size={23}
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
     itemInfo: {
         flexDirection: "row",
         /**cause flex direction is row, align items works with the X position */
-        alignItems: "center"
+        alignItems: "center",
+        padding: 5,
     },
     quantity: {
         fontFamily: 'open-sans',
@@ -45,7 +46,6 @@ const styles = StyleSheet.create({
         fontFamily: 'open-sans-bold',
         fontSize: 16
     },
-    itemInfo: {},
     delete: {
         marginLeft: 20
     },
