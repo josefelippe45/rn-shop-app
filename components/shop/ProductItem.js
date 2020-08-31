@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button, TouchableOpacity, Platform, TouchableNativeFeedback } from 'react-native';
-import Colors from '../../constants/Colors';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform, TouchableNativeFeedback } from 'react-native';
+import CustomButton from '../UI/CustomButton';
 
 const ProductItem = props => {
     let TouchableCmp = TouchableOpacity;
@@ -20,16 +20,16 @@ const ProductItem = props => {
                             <Text style={styles.price}>${props.price.toFixed(2)}</Text>
                         </View>
                         <View style={styles.actions}>
-                            <Button
-                                color={Colors.primary}
-                                title="View Details"
+                            <CustomButton
                                 onPress={props.onViewDetail}
-                            />
-                            <Button
-                                color={Colors.primary}
-                                title="To Cart"
+                            >
+                                <Text>View Details</Text>
+                            </CustomButton>
+                            <CustomButton
                                 onPress={props.onAddToCart}
-                            />
+                            >
+                                <Text>To Cart</Text>
+                            </CustomButton>
                         </View>
                     </View>
                 </TouchableCmp>

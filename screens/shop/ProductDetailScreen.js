@@ -1,11 +1,13 @@
 /**When the user select a product */
 import React from 'react';
-import { ScrollView, View, Text, Image, Button, StyleSheet } from 'react-native'
+import { ScrollView, View, Text, Image, Button, StyleSheet, TouchableOpacity } from 'react-native'
 /**will allow to tap into redux store and get the products from there */
 import { useSelector, useDispatch } from 'react-redux';
 //import actions
 import * as cartActions from '../../store/actions/cart';
 import Colors from '../../constants/Colors';
+import { Feather } from '@expo/vector-icons';
+import CustomButton from '../../components/UI/CustomButton';
 const ProductDetailScreen = props => {
     //extracting navigation data
     const productId = props.navigation.getParam('productId');
@@ -17,24 +19,36 @@ const ProductDetailScreen = props => {
     return (
         <ScrollView>
             <Image style={styles.image} source={{ uri: selectProduct.imageUrl }} />
-            <View style={styles.buttonsContainer}>
-                <Button
-                    color={Colors.primary}
-                    title="Add to Cart"
+            <View style={styles.content}>
+                <View style={styles.contentHeader}>
+                    <TouchableOpacity onPress={() => {
+                        props.navigation.goBack()
+                    }}>
+                        <Feather name='arrow-left' size={28} color={Colors.primary} />
+                    </TouchableOpacity>
+                    <View style={{ alignItems: "center", width: '80%' }}>
+                        <Text style={styles.headerTitle}>{selectProduct.title}</Text>
+                    </View>
+                </View>
+                <Text style={styles.price}>${selectProduct.price.toFixed(2)}</Text>
+                <CustomButton
                     onPress={() => {
                         dispatch(cartActions.addToCart(selectProduct))
                     }}
-                />
+
+                >
+                    <Text>Add to Cart</Text>
+                </CustomButton>
+                <Text style={styles.description}>{selectProduct.description}</Text>
             </View>
-            <Text style={styles.price}>${selectProduct.price.toFixed(2)}</Text>
-            <Text style={styles.description}>{selectProduct.description}</Text>
         </ScrollView>
     );
 }
 //setting dynamic header title
 ProductDetailScreen.navigationOptions = navData => {
     return {
-        headerTitle: navData.navigation.getParam('productTitle')
+        headerTitle: navData.navigation.getParam('productTitle'),
+        headerShown: false
     }
 }
 const styles = StyleSheet.create({
@@ -44,21 +58,58 @@ const styles = StyleSheet.create({
         height: 300
     },
     price: {
-        fontSize: 20,
+        fontSize: 30,
         color: '#888',
         textAlign: "center",
-        marginVertical: 20,
+        margin: 20,
         fontFamily: 'open-sans-bold',
+
+    },
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        shadowColor: 'black',
+        shadowOpacity: 0.26,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 8,
+        elevation: 5,
+        padding: 40,
+        marginHorizontal: 10,
+        marginTop: -20,
+        backgroundColor: '#FFF',
+        borderRadius: 8,
+        marginBottom: 16,
+        overflow: 'hidden',
     },
     description: {
         fontFamily: 'open-sans',
         fontSize: 20,
         textAlign: "center",
-        marginHorizontal: 20
+        margin: 20
     },
     buttonsContainer: {
         marginVertical: 10,
         alignItems: "center"
+    },
+    touchableCmp: {
+        justifyContent: 'center',
+        alignItems: "center",
+        backgroundColor: Colors.primary,
+        margin: 20,
+        borderRadius: 8,
+        padding: 20
+    },
+    buttonText: {
+        fontSize: 16,
+        color: '#FFF',
+        fontFamily: 'open-sans-bold'
+    },
+    contentHeader: {
+        flexDirection: "row",
+    },
+    headerTitle: {
+        fontFamily: 'open-sans-bold',
+        fontSize: 22,
     }
 });
 
