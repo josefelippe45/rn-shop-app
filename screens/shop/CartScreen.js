@@ -1,8 +1,8 @@
 /**Visit the products that are in the cart */
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import CartItem from '../../components/shop/CartItem';
-
+import CustomButton from '../../components/UI/CustomButton';
 import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
 //import cart actions
@@ -11,6 +11,7 @@ import * as cartActions from '../../store/actions/cart';
 import * as ordersActions from '../../store/actions/orders';
 const CartScreen = props => {
     const cartTotalAmount = useSelector(state => state.cart.totalAmount);
+    const [disabled, setDisabled] = useState(false);
     //getting access to the items with useSelector
     const cartItems = useSelector(state => {
         //creating an array
@@ -37,14 +38,15 @@ const CartScreen = props => {
                 <Text style={styles.summaryText}>Total:
                 <Text style={{ color: Colors.primary }}> $ {cartTotalAmount.toFixed(2)}</Text>
                 </Text>
-                <Button
-                    color={Colors.secondary}
-                    title="Order Now"
+                <CustomButton
                     disabled={cartItems.length === 0}
                     onPress={() => {
                         dispatch(ordersActions.addOrder(cartItems, cartTotalAmount))
                     }}
-                />
+                    style={{ backgroundColor: Colors.secondary }}
+                >
+                    <Text>Order Now</Text>
+                </CustomButton>
             </View>
             <FlatList
                 data={cartItems}
