@@ -1,9 +1,12 @@
 /**Order screen with the products */
 import React from 'react';
+
 import { FlatList, Text, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
+//import components
 import HeaderButton from '../../components/UI/HeaderButton';
+import OrderItem from '../../components/shop/OrderItem';
 
 const OrderScreen = props => {
     //selecting the slice of data, first orders is the pointer in App.js the second is orders in the initial state of the reducer
@@ -12,7 +15,12 @@ const OrderScreen = props => {
     return (
         <FlatList
             data={orders}
-            renderItem={itemData => <Text>{itemData.item.totalAmount}</Text>}
+            renderItem={itemData =>
+                <OrderItem
+                    amount={itemData.item.totalAmount}
+                    date={itemData.item.readableDate}
+                />
+            }
 
         />
     )
