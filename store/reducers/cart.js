@@ -1,4 +1,5 @@
 import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
+import { ADD_ORDER } from '../actions/orders';
 import CartItem from '../../models/cart-item';
 const initialState = {
     items: {},
@@ -56,7 +57,7 @@ export default (state = initialState, action) => {
                  * updatedCartItems needs to replace the old one. it takes the old state and then replace the
                  * productId with the productId from the action
                  */
-                updatedCartItems = {...state.items, [action.pid]: updatedCartItem}
+                updatedCartItems = { ...state.items, [action.pid]: updatedCartItem }
             } else {
                 //"clone" the current state
                 updatedCartItems = { ...state.items };
@@ -68,6 +69,9 @@ export default (state = initialState, action) => {
                 items: updatedCartItems,
                 totalAmount: state.totalAmount - selectedCartItem.productPrice
             }
+        //clear the cart
+        case ADD_ORDER:
+            return initialState;
     }
     return state;
 }
