@@ -1,5 +1,3 @@
-import { ToastAndroid } from "react-native";
-
 class Order {
     constructor(id, items, totalAmount, date){
         this.id = id;
@@ -8,5 +6,4 @@ class Order {
         this.date = date;
     }
 }
-
 export default Order;
