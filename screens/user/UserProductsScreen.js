@@ -7,10 +7,12 @@ import ProductItem from '../../components/shop/ProductItem';
 import HeaderButton from '../../components/UI/HeaderButton';
 import CustomButton from '../../components/UI/CustomButton';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as productsActions from '../../store/actions/products';
 
 const UserProductsScreen = props => {
     const userProducts = useSelector(state => state.products.userProducts);
+    const dispatch = useDispatch();
     return (
         <FlatList
             data={userProducts}
@@ -25,7 +27,7 @@ const UserProductsScreen = props => {
                     <CustomButton onPress={() => { }}>
                         <Text>Edit</Text>
                     </CustomButton>
-                    <CustomButton onPress={() => { }}>
+                    <CustomButton onPress={() => { dispatch(productsActions.deleteProduct(itemData.item.id)) }}>
                         <Text>Delete</Text>
                     </CustomButton>
                 </ProductItem>
