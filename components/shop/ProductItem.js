@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Platform, TouchableNativeFeedback } from 'react-native';
-import CustomButton from '../UI/CustomButton';
 
 const ProductItem = props => {
     let TouchableCmp = TouchableOpacity;
@@ -10,7 +9,7 @@ const ProductItem = props => {
 
         <View style={styles.product}>
             <View style={{ borderRadius: 10, overflow: 'hidden' }}>
-                <TouchableCmp onPress={props.onViewDetail} useForeground>
+                <TouchableCmp onPress={props.onSelect} useForeground>
                     <View>
                         <View style={styles.imageContainer}>
                             <Image style={styles.image} source={{ uri: props.image }} />
@@ -20,16 +19,7 @@ const ProductItem = props => {
                             <Text style={styles.price}>${props.price.toFixed(2)}</Text>
                         </View>
                         <View style={styles.actions}>
-                            <CustomButton
-                                onPress={props.onViewDetail}
-                            >
-                                <Text>View Details</Text>
-                            </CustomButton>
-                            <CustomButton
-                                onPress={props.onAddToCart}
-                            >
-                                <Text>To Cart</Text>
-                            </CustomButton>
+                            {props.children}
                         </View>
                     </View>
                 </TouchableCmp>

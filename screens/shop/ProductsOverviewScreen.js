@@ -1,10 +1,11 @@
 /**Screen the user see when the app loads */
 import React from 'react';
-import { FlatList, Platform } from 'react-native';
+import { FlatList, Platform, Text } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
 import ProductItem from '../../components/shop/ProductItem';
 import HeaderButton from '../../components/UI/HeaderButton';
+import CustomButton from '../../components/UI/CustomButton';
 /**will allow to tap into redux store and get the products from there */
 import { useSelector, useDispatch } from 'react-redux';
 //import actions
@@ -15,6 +16,13 @@ const ProductsOverviewScreen = props => {
     //useSelector receives the state as an input and return the data i want
     const products = useSelector(state => state.products.availableProducts);
     const dispatch = useDispatch();
+    const selectItemHandler = (id, title) => {
+        props.navigation.navigate('ProductDetail',
+            {
+                productId: id,
+                productTitle: title
+            })
+    }
     return (
         <FlatList
 
@@ -25,20 +33,22 @@ const ProductsOverviewScreen = props => {
                     image={itemData.item.imageUrl}
                     title={itemData.item.title}
                     price={itemData.item.price}
-                    onViewDetail={() => {
-                        props.navigation.navigate('ProductDetail',
-                            {
-                                //pointer at the id so it can be loaded in the detail screen
-                                productId: itemData.item.id,
-                                //pointer at title to set the header title of detail screen
-                                productTitle: itemData.item.title
-                            })
+                    onSelect={() => {
+                        selectItemHandler(itemData.item.id, itemData.item.title)
                     }}
-                    onAddToCart={() => {
+                >
+                    <CustomButton onPress={() => {
+                        selectItemHandler(itemData.item.id, itemData.item.title)
+                    }}>
+                        <Text>View Details</Text>
+                    </CustomButton>
+                    <CustomButton onPress={() => {
                         //dispatches the product and add it to cart with help of the action
                         dispatch(cartActions.addToCart(itemData.item));
-                    }}
-                />
+                    }}>
+                        <Text>To Cart</Text>
+                    </CustomButton>
+                </ProductItem>
             )}
         />
     );
