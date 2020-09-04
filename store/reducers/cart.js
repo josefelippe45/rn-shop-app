@@ -1,6 +1,7 @@
 import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
 import { ADD_ORDER } from '../actions/orders';
 import CartItem from '../../models/cart-item';
+import { DELETE_PRODUCT } from "../actions/products";
 const initialState = {
     items: {},
     totalAmount: 0
@@ -72,6 +73,25 @@ export default (state = initialState, action) => {
         //clear the cart
         case ADD_ORDER:
             return initialState;
+        //delete product. remove from the cart if it was deleted
+        case DELETE_PRODUCT:
+            /**verify if the item exists. if it isn't the case so just return the state
+             * if it pass the if check, so it knows the product with the id to be deleted is part
+             * of the items
+            */
+            if(!state.items[action.pid]) return state;
+            //copy exiting state then delete the item from the cart using action.pid that means the productId
+            const updatedItems = {...state.items}
+            //getting the item total so it will delete the sum of it
+            const itemTotal = state.items[action.pid].sum;
+            delete updatedItems[action.pid]
+            return{
+                ...state,
+                //copy of the existing items without the deleted product
+                items: updatedItems,
+                //itemTotal takes the whole sum and here the totalAmount state gets "deleted"
+                totalAmount: state.totalAmount - itemTotal,
+            };
     }
     return state;
 }
