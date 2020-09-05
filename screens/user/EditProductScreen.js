@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, TextInput, StyleSheet, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector } from 'react-redux';
-
+import { useSelector, useDispatch } from 'react-redux';
+//import components
 import HeaderButton from '../../components/UI/HeaderButton';
+//import actions
+import * as productActions from '../../store/actions/products'
 
 const EditProductScreen = props => {
     //when in edit mode
@@ -19,6 +21,21 @@ const EditProductScreen = props => {
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState(editedProduct ? editedProduct.description : '');
 
+    const dispatch = useDispatch();
+    //submitting and communicate with the header buttons
+    const submitHandler = useCallback(() => {
+        //validate wether the user is editing or creating
+        if (editedProduct) {
+            dispatch(productActions.updateProduct(prodId, title, description, imageUrl));
+        } else {
+            //the plus convert the price to number
+            dispatch(productActions.createProduct(title, description, imageUrl, +price))
+        }
+    }, [dispatch, prodId, title, description, imageUrl, price])
+    //submitting and communicate with the header buttons. submit is a key that points at the submitHandler function
+    useEffect(() => {
+        props.navigation.setParams({ submit: submitHandler })
+    }, [submitHandler])
 
     return (
         <ScrollView>
@@ -62,6 +79,7 @@ const EditProductScreen = props => {
     );
 }
 EditProductScreen.navigationOptions = navData => {
+    const submitFn = navData.navigation.getParam('submit')
     //depending on where the user press
     return {
         headerTitle: navData.navigation.getParam('productId')
@@ -70,7 +88,7 @@ EditProductScreen.navigationOptions = navData => {
         headerRight: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item title="Save" iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
-                    onPress={() => { }} />
+                    onPress={submitFn} />
             </HeaderButtons>
         )
     }
