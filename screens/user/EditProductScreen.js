@@ -31,6 +31,7 @@ const EditProductScreen = props => {
             //the plus convert the price to number
             dispatch(productActions.createProduct(title, description, imageUrl, +price))
         }
+        props.navigation.goBack();
     }, [dispatch, prodId, title, description, imageUrl, price])
     //submitting and communicate with the header buttons. submit is a key that points at the submitHandler function
     useEffect(() => {
