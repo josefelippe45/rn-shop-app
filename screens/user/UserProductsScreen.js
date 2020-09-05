@@ -1,6 +1,6 @@
 /**List of products that belongs to the user */
 import React from 'react';
-import { FlatList, Platform, Text } from 'react-native';
+import { FlatList, Platform, Text, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
 import ProductItem from '../../components/shop/ProductItem';
@@ -17,6 +17,19 @@ const UserProductsScreen = props => {
     const editProductHandler = (id) => {
         props.navigation.navigate('EditProduct', { productId: id });
     }
+
+    const deleteProductHandler = (id) => {
+        Alert.alert('Are you sure?', 'You will delete this item',
+            [
+                { text: 'No', style: 'default' },
+                {
+                    text: 'Yes', style: 'destructive', onPress: () => {
+                        dispatch(productsActions.deleteProduct(id))
+                    }
+                },
+            ]
+        )
+    };
     return (
         <FlatList
             data={userProducts}
@@ -31,7 +44,7 @@ const UserProductsScreen = props => {
                     <CustomButton onPress={() => { editProductHandler(itemData.item.id) }}>
                         <Text>Edit</Text>
                     </CustomButton>
-                    <CustomButton onPress={() => { dispatch(productsActions.deleteProduct(itemData.item.id)) }}>
+                    <CustomButton onPress={deleteProductHandler.bind(this, itemData.item.id)}>
                         <Text>Delete</Text>
                     </CustomButton>
                 </ProductItem>

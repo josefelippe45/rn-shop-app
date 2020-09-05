@@ -5,8 +5,8 @@ const CustomButton = props => {
     let TouchableCmp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) TouchableCmp = TouchableNativeFeedback;
     return(
-        <TouchableCmp onPress={props.onPress} disabled={props.disabled} style={props.style}>
-            <View style={props.disabled ? styles.buttonDisabled : styles.button}>
+        <TouchableCmp onPress={props.onPress} disabled={props.disabled} >
+            <View style={props.disabled ? styles.buttonDisabled : {...styles.button, ...props.style}}>
                 <Text style={styles.text}>{props.children}</Text>
             </View>
         </TouchableCmp>

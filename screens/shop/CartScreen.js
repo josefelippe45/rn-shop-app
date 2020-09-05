@@ -5,6 +5,7 @@ import CartItem from '../../components/shop/CartItem';
 import CustomButton from '../../components/UI/CustomButton';
 import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
+import Card from '../../components/UI/Card'
 //import cart actions
 import * as cartActions from '../../store/actions/cart';
 //import order actions
@@ -33,11 +34,12 @@ const CartScreen = props => {
     const dispatch = useDispatch();
     return (
         <View style={styles.container}>
-            <View style={styles.summary}>
+            <Card style={styles.summary}>
                 <Text style={styles.summaryText}>Total:{' '}
-                <Text style={{ color: Colors.primary }}>${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}</Text>
+                    <Text style={{ color: Colors.primary }}>${Math.round(cartTotalAmount.toFixed(2) * 100) / 100}</Text>
                 </Text>
                 <CustomButton
+                    style={styles.button}
                     disabled={cartItems.length === 0}
                     onPress={() => {
                         dispatch(ordersActions.addOrder(cartItems, cartTotalAmount));
@@ -45,7 +47,7 @@ const CartScreen = props => {
                 >
                     <Text>Order Now</Text>
                 </CustomButton>
-            </View>
+            </Card>
             <FlatList
                 data={cartItems}
                 keyExtractor={
@@ -72,21 +74,15 @@ const styles = StyleSheet.create({
     container: {
         margin: 20
     },
+    button:{
+        backgroundColor: Colors.secondary
+    },
     summary: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 20,
         padding: 10,
-        /**those shadow properties are for ios */
-        shadowColor: 'black',
-        shadowOpacity: 0.26,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 8,
-        /**elevation is for android */
-        elevation: 5,
-        borderRadius: 10,
-        backgroundColor: 'white',
     },
     summaryText: {
         fontFamily: 'open-sans-bold',
