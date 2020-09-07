@@ -1,5 +1,10 @@
 import PRODUCTS from '../../data/dummy-data';
-import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT } from '../actions/products';
+import {
+    DELETE_PRODUCT,
+    CREATE_PRODUCT,
+    UPDATE_PRODUCT,
+    SET_PRODUCTS
+} from '../actions/products';
 import Product from '../../models/product';
 
 const initialState = {
@@ -11,17 +16,20 @@ const initialState = {
 /**reducer */
 export default (state = initialState, action) => {
     switch (action.type) {
+        case SET_PRODUCTS:
+            return {
+                availableProducts: action.products,
+                userProducts: action.products.filter(prod => prod.ownerId === 'u1')
+            };
         case CREATE_PRODUCT:
-            //creating a dummy id. Product(id, ownerId, title, imageUrl, description, price);
             const newProduct = new Product(
-                new Date().toString(),
+                action.productData.id,
                 'u1',
                 action.productData.title,
                 action.productData.imageUrl,
                 action.productData.description,
                 action.productData.price
             );
-
             return {
                 //copy of the existing state
                 ...state,
@@ -29,7 +37,7 @@ export default (state = initialState, action) => {
                 availableProducts: state.availableProducts.concat(newProduct),
                 //returns a new array which is the old array plus a new element
                 userProducts: state.userProducts.concat(newProduct)
-            }
+            };
         case UPDATE_PRODUCT:
             //find the index of the current product
             const productIndex = state.userProducts.findIndex(prod => prod.id === action.pid);
@@ -47,9 +55,9 @@ export default (state = initialState, action) => {
             //replace the product at that index with the new updatedProduct const this is done in the copy
             updatedUserProducts[productIndex] = updatedProduct;
             //find the availableProduct index
-            const availableProductIndex= state.availableProducts.findIndex(prod => prod.id === action.pid);
+            const availableProductIndex = state.availableProducts.findIndex(prod => prod.id === action.pid);
             //update the state of availableProducts
-            const updatedAvailableProducts =[...state.availableProducts];
+            const updatedAvailableProducts = [...state.availableProducts];
             //then set the updatedAvailableProducts for the given availableProductIndex
             //replace the existing product with the updatedProduct
             updatedAvailableProducts[availableProductIndex] = updatedProduct;

@@ -1,5 +1,5 @@
 /**Screen the user see when the app loads */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, Platform, Text } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
@@ -10,12 +10,18 @@ import CustomButton from '../../components/UI/CustomButton';
 import { useSelector, useDispatch } from 'react-redux';
 //import actions
 import * as cartActions from '../../store/actions/cart';
+import * as productsActions from '../../store/actions/products'
 
 
 const ProductsOverviewScreen = props => {
     //useSelector receives the state as an input and return the data i want
     const products = useSelector(state => state.products.availableProducts);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(productsActions.fetchProducts());
+    }, [dispatch]);
+
     const selectItemHandler = (id, title) => {
         props.navigation.navigate('ProductDetail',
             {
