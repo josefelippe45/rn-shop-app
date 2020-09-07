@@ -30,6 +30,15 @@ const ProductsOverviewScreen = props => {
         }
         setIsLoading(false)
     }, [dispatch, setIsLoading, setError]);
+    const { navigation } = props;
+    useEffect(() => {
+        //adding a listener so the component re-renders when the user access the screen via navigation
+        const willFocus = navigation.addListener('willFocus', loadProducts);
+        //clean up function when re-run
+        return ()=>{
+            willFocus.remove();
+        }
+    }, [loadProducts, navigation])
     useEffect(() => {
         loadProducts()
     }, [dispatch, loadProducts]);
