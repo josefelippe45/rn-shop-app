@@ -13,11 +13,10 @@ export const fetchProducts = () => {
         'https://rn-shop-app-8f03e.firebaseio.com/products.json'
       );
       //if it is an http 200
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error('something went wrong')
       }
       const resData = await response.json();
-      console.log(resData);
       const loadedProducts = [];
       //transform the fetch data into an array
       for (const key in resData) {
@@ -35,14 +34,22 @@ export const fetchProducts = () => {
       }
 
       dispatch({ type: SET_PRODUCTS, products: loadedProducts });
-    } catch(err){
+    } catch (err) {
       throw err;
     }
   };
 };
 
 export const deleteProduct = productId => {
-  return { type: DELETE_PRODUCT, pid: productId };
+  return async dispatch =>{
+     await fetch(
+      `https://rn-shop-app-8f03e.firebaseio.com/products/${productId}.json`,
+      {
+        method: 'DELETE',
+      }
+    );
+    dispatch( { type: DELETE_PRODUCT, pid: productId });
+  }
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
@@ -80,13 +87,30 @@ export const createProduct = (title, description, imageUrl, price) => {
 };
 
 export const updateProduct = (id, title, description, imageUrl) => {
-  return {
-    type: UPDATE_PRODUCT,
-    pid: id,
-    productData: {
-      title,
-      description,
-      imageUrl
-    }
+  return async dispatch => {
+    await fetch(
+      `https://rn-shop-app-8f03e.firebaseio.com/products/${id}.json`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          imageUrl,
+        })
+      }
+    );
+    dispatch({
+      type: UPDATE_PRODUCT,
+      pid: id,
+      productData: {
+        title,
+        description,
+        imageUrl
+      }
+    });
+
   };
 };
